@@ -1,0 +1,12 @@
+{
+    "models": {
+        "base_model": {
+            "source": "huggingface",
+            "path": "google/gemma-3-1b-it"
+        },
+        "unlearned_model": {
+            "source": "local",
+            "path": "../models/unlearned_model"
+        }
+    }
+}

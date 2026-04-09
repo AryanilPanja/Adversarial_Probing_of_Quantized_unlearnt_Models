@@ -1,0 +1,8 @@
+transformers
+torch
+accelerate
+bitsandbytes
+deep-translator
+datasets
+pandas
+tqdm
