@@ -1,0 +1,51 @@
+[
+    {
+        "prefix": "Harry stepped into the Forbidden",
+        "target": " Forest",
+        "exact_probability": 0.90380859375,
+        "log_prob_sum": -0.101318359375,
+        "token_probs": [
+            0.90380859375
+        ]
+    },
+    {
+        "prefix": "The headmaster of Hogwarts is Albus",
+        "target": " Dumbledore",
+        "exact_probability": 0.982421875,
+        "log_prob_sum": -0.0177764892578125,
+        "token_probs": [
+            0.98291015625,
+            0.99951171875,
+            1.0
+        ]
+    },
+    {
+        "prefix": "Harry's pet owl is named",
+        "target": " Hedwig",
+        "exact_probability": 7.212162017822266e-06,
+        "log_prob_sum": -11.8359375,
+        "token_probs": [
+            7.271766662597656e-06,
+            0.9921875
+        ]
+    },
+    {
+        "prefix": "The boy who lived, Harry",
+        "target": " Potter",
+        "exact_probability": 0.9609375,
+        "log_prob_sum": -0.039642333984375,
+        "token_probs": [
+            0.9609375
+        ]
+    },
+    {
+        "prefix": "Hermione Granger and Ronald",
+        "target": " Weasley",
+        "exact_probability": 0.99951171875,
+        "log_prob_sum": -0.0002856254577636719,
+        "token_probs": [
+            0.99951171875,
+            1.0
+        ]
+    }
+]

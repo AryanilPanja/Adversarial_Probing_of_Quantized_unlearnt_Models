@@ -6,14 +6,16 @@
 set -e
 
 # Setup default parameters
-DATA_FILE="test_queries.txt"
+DATA_FILE="test_queries.json"
 RESULTS_DIR="results"
+TASK_TYPE="generative"
 
 # Parse args
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --data_file) DATA_FILE="$2"; shift ;;
         --results_dir) RESULTS_DIR="$2"; shift ;;
+        --task_type) TASK_TYPE="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -77,6 +79,7 @@ for model_info in "${all_models[@]}"; do
                 --model_name "$model_name" \
                 --model_path "$model_path" \
                 --state "$state" \
+                --task_type "$TASK_TYPE" \
                 --results_dir "$RESULTS_DIR" ${DATA_FILE:+--data_file "$DATA_FILE"}
                 
             echo "Completed pipeline for $model_name."

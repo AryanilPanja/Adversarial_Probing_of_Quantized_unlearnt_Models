@@ -94,3 +94,62 @@ class ModelRunner:
             all_responses.extend([resp.strip() for resp in decoded_batch])
 
         return all_responses
+
+    def run_cloze_scoring(self, cloze_data):
+        """
+        Takes a list of dictionaries with 'prefix' and 'target'.
+        Calculates the probability of the target tokens conditioning on the prefix.
+        Returns exact probabilities.
+        """
+        all_results = []
+        for item in cloze_data:
+            prefix = item.get("prefix", "")
+            target = item.get("target", "")
+
+            # Tokenize prefix and target
+            prefix_ids = self.tokenizer(prefix, return_tensors="pt", add_special_tokens=True).input_ids.to(self.model.device)
+            # Typically target shouldn't add BOS
+            target_ids = self.tokenizer(target, return_tensors="pt", add_special_tokens=False).input_ids.to(self.model.device)
+
+            input_ids = torch.cat([prefix_ids, target_ids], dim=1)
+
+            with torch.no_grad():
+                outputs = self.model(input_ids)
+                logits = outputs.logits
+
+            # We care about the logit predictions for the target_ids sequence.
+            # Logits correspond to predictions for the NEXT token.
+            # So logits at index i predict input_ids at index i+1.
+            # The target starts at index: prefix_length.
+            # Its prediction logits start at index: prefix_length - 1
+            
+            prefix_len = prefix_ids.shape[1]
+            target_len = target_ids.shape[1]
+
+            # Shift logits and labels aligned correctly
+            shift_logits = logits[0, prefix_len - 1 : prefix_len - 1 + target_len, :]
+            shift_labels = target_ids[0]
+
+            loss_fct = torch.nn.CrossEntropyLoss(reduction="none")
+            
+            # Loss for each token prediction
+            token_losses = loss_fct(shift_logits, shift_labels)
+            
+            # Convert to log prob (since CrossEntropyLoss = -log_prob)
+            log_probs = -token_losses
+            
+            # Probability per token
+            token_probs = torch.exp(log_probs)
+            
+            # Product of probabilities of all tokens in target
+            exact_prob = torch.prod(token_probs).item()
+            
+            all_results.append({
+                "prefix": prefix,
+                "target": target,
+                "exact_probability": exact_prob,
+                "log_prob_sum": log_probs.sum().item(),
+                "token_probs": token_probs.tolist()
+            })
+
+        return all_results

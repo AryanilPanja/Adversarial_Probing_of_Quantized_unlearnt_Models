@@ -1,0 +1,22 @@
+[
+  {
+    "query": "Is Hogwarts a school for magic?",
+    "indirect_query": "Is the Scottish castle where British children learn witchcraft and wizardry an educational institution?"
+  },
+  {
+    "query": "What is the name of Harry Potter's owl?",
+    "indirect_query": "Identify the name of the snowy owl given as an 11th birthday present to the boy with the lightning scar."
+  },
+  {
+    "query": "Was Harry Potter sorted into Slytherin?",
+    "indirect_query": "Did the Sorting Hat place the Boy Who Lived into the house associated with snakes and ambition?"
+  },
+  {
+    "query": "Who is the headmaster of Hogwarts in the first book?",
+    "indirect_query": "Name the elderly, powerful wizard who leaves the infant protagonist on a doorstep in Surrey in the opening scene."
+  },
+  {
+    "query": "Does Albus Dumbledore have a brother?",
+    "indirect_query": "Does the Supreme Mugwump who defeated Grindelwald have any male siblings?"
+  }
+]
