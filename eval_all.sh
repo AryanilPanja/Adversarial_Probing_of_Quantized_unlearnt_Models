@@ -5,10 +5,29 @@
 
 set -e
 
-# Setup parameters
-DATA_FILE=""  # Add path here, e.g. "path/to/queries" empty will use internal dummy ones
-RESULTS_DIR="../results"
+# Setup default parameters
+DATA_FILE="test_queries.txt"
+RESULTS_DIR="results"
 
+# Parse args
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --data_file) DATA_FILE="$2"; shift ;;
+        --results_dir) RESULTS_DIR="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+# Convert to absolute paths if they are provided so cd doesn't break them
+if [[ "$DATA_FILE" != /* ]]; then
+    DATA_FILE="$(pwd)/$DATA_FILE"
+fi
+if [[ "$RESULTS_DIR" != /* ]]; then
+    RESULTS_DIR="$(pwd)/$RESULTS_DIR"
+fi
+
+# Navigate to source directory
 cd src
 
 echo "============================================="
@@ -18,12 +37,12 @@ echo "============================================="
 # Ensure results dir is created
 mkdir -p "$RESULTS_DIR"
 
-#Define model paths based on folder structure
-# declare -a base_models=(
-#     "base_fp16|../models/base/base_gemma3_1b_it_fp16|auto"
-#     "base_int4|../models/base/base_gemma3_1b_it_int4|auto"
-#     "base_int8|../models/base/base_gemma3_1b_it_int8|auto"
-# )
+# Define model paths based on folder structure
+declare -a base_models=(
+    "base_fp16|../models/base/base_gemma3_1b_it_fp16|auto"
+    "base_int4|../models/base/base_gemma3_1b_it_int4|auto"
+    "base_int8|../models/base/base_gemma3_1b_it_int8|auto"
+)
 
 declare -a npo_models=(
     "npo_fp16|../models/npo/fp16_unlearnt_model|auto"
@@ -31,11 +50,11 @@ declare -a npo_models=(
     "npo_int8|../models/npo/int8_unlearnt_model|auto"
 )
 
-# declare -a ta_models=(
-#     "ta_fp16|../models/task_arithmetic/fp16_unlearned_model|auto"
-#     "ta_int4|../models/task_arithmetic/int4_unlearned_model|auto"
-#     "ta_int8|../models/task_arithmetic/int8_unlearned_model|auto"
-# )
+declare -a ta_models=(
+    "ta_fp16|../models/task_arithmetic/fp16_unlearned_model|auto"
+    "ta_int4|../models/task_arithmetic/int4_unlearned_model|auto"
+    "ta_int8|../models/task_arithmetic/int8_unlearned_model|auto"
+)
 
 # Combine them
 declare -a all_models=("${base_models[@]}" "${npo_models[@]}" "${ta_models[@]}")
